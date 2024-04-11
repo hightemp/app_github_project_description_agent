@@ -3,6 +3,7 @@ import 'dotenv/config'
 import OpenAI from 'openai';
 
 import TurndownService from 'turndown';
+import cheerio from 'cheerio'
 
 import * as promts from './promts'
 import { sleep } from 'openai/core';
@@ -57,11 +58,11 @@ async function create_complition() {
         max_tokens: 30000,
     });
 
-    console.log(chatCompletion.choices);
+    // console.log(chatCompletion.choices);
     if (!chatCompletion.choices || !chatCompletion.choices.length) {
         throw new Error('api error');
     }
-    console.log(chatCompletion.choices[0].message);
+    // console.log(chatCompletion.choices[0].message);
 
     var message = chatCompletion.choices[0].message;
 
@@ -81,6 +82,24 @@ async function get_url_as_markdown(url: string) {
     return markdown;
 }
 
+async function get_github_project_files() {
+    var answer = await fetch(project_url);
+    var html = await answer.text();
+
+    const $ = cheerio.load(html);
+
+    var table_html = $('table tbody').html()
+
+    if (table_html) {
+        var turndownService = new TurndownService()
+        var markdown = turndownService.turndown(table_html)
+    
+        return markdown;
+    }
+  
+    return '';
+}
+
 function write_error_message() {
     add_user_message('It is necessary to adhere to the described JSON format. Please, write action in JSON format!');
 }
@@ -92,6 +111,8 @@ async function parse_action(json: string) {
 
     if (action.action == 'get_markdown_of_url') {
         add_user_message(await get_url_as_markdown(action.params[0]));
+    } else if (action.action == 'get_github_project_files') {
+        add_user_message(await get_github_project_files());
     } else if (action.action == 'complete') {
         isEnd = true;
         console.log('[COMPLETE] '+action.params[0]);

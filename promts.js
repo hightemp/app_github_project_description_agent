@@ -20,6 +20,7 @@ You must write answer in json format, example answer:
 
 You can use these actions:
 '{ "action": "get_markdown_of_url", "params": ["http://example.com"] }' - you get the markdown of page
+'{ "action": "get_github_project_files" }' - get the markdown list of project files
 '{ "action": "think", "params": ["some thoughts about task"] }' - use these to print your thoughts, step by step
 '{ "action": "complete", "params": ["some result"] }' - use these if you finish task
 

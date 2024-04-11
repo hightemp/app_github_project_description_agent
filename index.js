@@ -38,6 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const openai_1 = __importDefault(require("openai"));
 const turndown_1 = __importDefault(require("turndown"));
+const cheerio_1 = __importDefault(require("cheerio"));
 const promts = __importStar(require("./promts"));
 const core_1 = require("openai/core");
 const openai = new openai_1.default({
@@ -105,6 +106,20 @@ function get_url_as_markdown(url) {
         return markdown;
     });
 }
+function get_github_project_files() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var answer = yield fetch(project_url);
+        var html = yield answer.text();
+        const $ = cheerio_1.default.load(html);
+        var table_html = $('table tbody').html();
+        if (table_html) {
+            var turndownService = new turndown_1.default();
+            var markdown = turndownService.turndown(table_html);
+            return markdown;
+        }
+        return '';
+    });
+}
 function write_error_message() {
     add_user_message('It is necessary to adhere to the described JSON format. Please, write action in JSON format!');
 }
@@ -114,6 +129,9 @@ function parse_action(json) {
         var action = JSON.parse(json);
         if (action.action == 'get_markdown_of_url') {
             add_user_message(yield get_url_as_markdown(action.params[0]));
+        }
+        else if (action.action == 'get_github_project_files') {
+            add_user_message(yield get_github_project_files());
         }
         else if (action.action == 'complete') {
             isEnd = true;
@@ -148,7 +166,7 @@ function make_action() {
 }
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log((yield get_url_as_markdown('https://github.com/lencx/ChatGPT')).length);
+        console.log(yield get_github_project_files());
         process.exit(0);
         add_user_message(promts.init_promt(goal, language));
         while (!isEnd) {
