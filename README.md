@@ -14,7 +14,7 @@
 npm run start
 ```
 
-## Что в результате
+## Пример вывода
 
 ```
 [GPT] { "action": "complete", "params": [{
