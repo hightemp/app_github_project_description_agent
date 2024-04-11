@@ -83,6 +83,7 @@ function create_complition() {
         const chatCompletion = yield openai.chat.completions.create({
             messages: messages,
             model: model,
+            max_tokens: 30000,
         });
         console.log(chatCompletion.choices);
         if (!chatCompletion.choices || !chatCompletion.choices.length) {
@@ -147,6 +148,8 @@ function make_action() {
 }
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log((yield get_url_as_markdown('https://github.com/lencx/ChatGPT')).length);
+        process.exit(0);
         add_user_message(promts.init_promt(goal, language));
         while (!isEnd) {
             yield make_action();

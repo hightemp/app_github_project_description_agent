@@ -81,9 +81,6 @@ async function get_url_as_markdown(url: string) {
     return markdown;
 }
 
-console.log(await get_url_as_markdown(https://github.com/hightemp/wapp_project_manager));
-process.exit(0);
-
 function write_error_message() {
     add_user_message('It is necessary to adhere to the described JSON format. Please, write action in JSON format!');
 }
