@@ -13,3 +13,19 @@
 ```
 npm run start
 ```
+
+## Что в результате
+
+```
+[GPT] { "action": "complete", "params": [{
+    "project_name": "wapp_project_manager",
+    "url": "https://github.com/hightemp/wapp_project_manager",
+    "tags": ["project manager", "desktop app", "markdown editor", "vue3", "tauri"],
+    "frameworks": {
+        "vue": "package.json",
+        "tauri": "package.json",
+        "vuetify": "package.json"
+    },
+    "short_description": "Десктопное приложение для управления проектами с markdown редактором. Основано на фреймворке Tauri, использует Vue 3, Vite, Vuetify, TypeScript. Поддерживает разделение рабочей области на панели."
+}]}
+```
