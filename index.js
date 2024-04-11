@@ -41,6 +41,7 @@ const turndown_1 = __importDefault(require("turndown"));
 const cheerio_1 = __importDefault(require("cheerio"));
 const promts = __importStar(require("./promts"));
 const core_1 = require("openai/core");
+const fs_1 = __importDefault(require("fs"));
 const openai = new openai_1.default({
     apiKey: process.env['OPENAI_API_KEY'],
     baseURL: process.env['OPENAI_BASE_PATH'],
@@ -74,9 +75,14 @@ const goal = `
 `;
 var messages = [];
 var isEnd = false;
+function save_messages_log() {
+    var json = JSON.stringify(messages, null, 4);
+    fs_1.default.writeFileSync('./logs/latest.log', json);
+}
 function add_user_message(text) {
     console.log(`[USER] ${text}`);
     messages.push({ role: 'user', content: text });
+    save_messages_log();
 }
 function create_complition() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -86,14 +92,15 @@ function create_complition() {
             model: model,
             max_tokens: 30000,
         });
-        console.log(chatCompletion.choices);
+        // console.log(chatCompletion.choices);
         if (!chatCompletion.choices || !chatCompletion.choices.length) {
             throw new Error('api error');
         }
-        console.log(chatCompletion.choices[0].message);
+        // console.log(chatCompletion.choices[0].message);
         var message = chatCompletion.choices[0].message;
         console.log(`[GPT] ${message.content}`);
         messages.push(message);
+        save_messages_log();
         return message.content;
     });
 }
@@ -166,8 +173,6 @@ function make_action() {
 }
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(yield get_github_project_files());
-        process.exit(0);
         add_user_message(promts.init_promt(goal, language));
         while (!isEnd) {
             yield make_action();
