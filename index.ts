@@ -8,6 +8,8 @@ import cheerio from 'cheerio'
 import * as promts from './promts'
 import { sleep } from 'openai/core';
 
+import fs from 'fs'
+
 const openai = new OpenAI({
     apiKey: process.env['OPENAI_API_KEY'],
     baseURL: process.env['OPENAI_BASE_PATH'],
@@ -44,9 +46,15 @@ const goal = `
 var messages: Array<any> = []
 var isEnd = false;
 
+function save_messages_log() {
+    var json = JSON.stringify(messages, null, 4);
+    fs.writeFileSync('./logs/latest.log', json);
+}
+
 function add_user_message(text: string) {
     console.log(`[USER] ${text}`);
     messages.push({ role: 'user', content: text })
+    save_messages_log();
 }
 
 async function create_complition() {
@@ -68,6 +76,7 @@ async function create_complition() {
 
     console.log(`[GPT] ${message.content}`);
     messages.push(message);
+    save_messages_log();
 
     return message.content
 }
