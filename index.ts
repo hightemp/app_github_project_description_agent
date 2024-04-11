@@ -17,7 +17,11 @@ const openai = new OpenAI({
 
 // const model = 'openai/gpt-3.5-turbo'
 // const model = 'openai/gpt-4-turbo'
-const model = 'google/gemini-pro-1.5'
+// const model = 'google/gemini-pro-1.5'
+// const model = 'cohere/command-r'
+// const model = 'translate-databricks/dbrx-instruct'
+// const model = 'anthropic/claude-3-haiku'
+const model = 'anthropic/claude-3-opus'
 const language = 'russian'
 // const project_url = `https://github.com/lencx/ChatGPT`
 const project_url = `https://github.com/hightemp/wapp_project_manager`
@@ -138,7 +142,7 @@ async function make_action() {
     try {
         var answer = await create_complition()
         if (answer) {
-            parse_action(answer);
+            await parse_action(answer);
         } else {
             write_error_message();
         }

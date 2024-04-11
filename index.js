@@ -48,7 +48,11 @@ const openai = new openai_1.default({
 });
 // const model = 'openai/gpt-3.5-turbo'
 // const model = 'openai/gpt-4-turbo'
-const model = 'google/gemini-pro-1.5';
+// const model = 'google/gemini-pro-1.5'
+// const model = 'cohere/command-r'
+// const model = 'translate-databricks/dbrx-instruct'
+// const model = 'anthropic/claude-3-haiku'
+const model = 'anthropic/claude-3-opus';
 const language = 'russian';
 // const project_url = `https://github.com/lencx/ChatGPT`
 const project_url = `https://github.com/hightemp/wapp_project_manager`;
@@ -159,7 +163,7 @@ function make_action() {
         try {
             var answer = yield create_complition();
             if (answer) {
-                parse_action(answer);
+                yield parse_action(answer);
             }
             else {
                 write_error_message();

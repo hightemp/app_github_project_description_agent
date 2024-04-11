@@ -13,15 +13,16 @@ ${actions_promt()}
 export function actions_promt() {
     return `
 You have several actions to release goal.
-You must write answer in json format, example answer:
-'{ "action": "action", "params":["1", "2"]}'
 
 You can use these actions:
-'{ "action": "get_markdown_of_url", "params": ["http://example.com"] }' - you get the markdown of page
-'{ "action": "get_github_project_files", "params": [] }' - get the markdown list of project files
-'{ "action": "think", "params": ["some thoughts about task"] }' - use these to print your thoughts, step by step
-'{ "action": "complete", "params": ["some result"] }' - use these if you finish task
+{ "action": "get_markdown_of_url", "params": ["http://example.com"] } - you get the markdown of page
+{ "action": "get_github_project_files", "params": [] } - get the markdown list of project files
+{ "action": "think", "params": ["some thoughts about task"] } - use these to print your thoughts, step by step
+{ "action": "complete", "params": ["some result"] } - use these if you finish task
 
+You can use one action at time.
+You must write answer in json format, example answer: { "action": "action", "params":["1", "2"]}
+IMPORTANT: Don't write more than one action in one request!
 If you think that work finished you must write "complete" action.
 `
 }
