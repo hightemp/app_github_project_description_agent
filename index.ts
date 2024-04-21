@@ -21,10 +21,13 @@ const openai = new OpenAI({
 // const model = 'cohere/command-r'
 // const model = 'translate-databricks/dbrx-instruct'
 // const model = 'anthropic/claude-3-haiku'
-const model = 'anthropic/claude-3-opus'
+// const model = 'anthropic/claude-3-opus'
+// const model = 'translate-microsoft/wizardlm-2-7b'
+// const model = 'translate-mistralai/mixtral-8x22b-instruct'
+const model = 'meta-llama/llama-3-70b-instruct'
 const language = 'russian'
-// const project_url = `https://github.com/lencx/ChatGPT`
-const project_url = `https://github.com/hightemp/wapp_project_manager`
+const project_url = `https://github.com/lencx/ChatGPT`
+// const project_url = `https://github.com/hightemp/wapp_project_manager`
 const goal = `
 Нужно составить описание проекта ${project_url}
 
@@ -32,7 +35,7 @@ const goal = `
 { "action": "complete", "params": [{
     "project_name": "название проекта",
     "url": "http://example.com",
-    "tags": ["theme_one", "theme_two"],
+    "tags": ["one", "two"],
     "frameworks": {
         "react": "package.json",
         "fastapi": "requirements.txt"
@@ -49,10 +52,12 @@ const goal = `
 
 var messages: Array<any> = []
 var isEnd = false;
+var start_timestamp = (new Date).getTime()
 
 function save_messages_log() {
     var json = JSON.stringify(messages, null, 4);
-    fs.writeFileSync('./logs/latest.log', json);
+    var model_name = model.replace(/\W/g, '_');
+    fs.writeFileSync(`./logs/${start_timestamp}_${model_name}.log`, json);
 }
 
 function add_user_message(text: string) {
@@ -90,6 +95,7 @@ async function get_url_as_markdown(url: string) {
     var html = await answer.text();
 
     var turndownService = new TurndownService()
+    turndownService.remove('script')
     var markdown = turndownService.turndown(html)
 
     return markdown;
@@ -105,6 +111,7 @@ async function get_github_project_files() {
 
     if (table_html) {
         var turndownService = new TurndownService()
+        turndownService.remove('script')
         var markdown = turndownService.turndown(table_html)
     
         return markdown;

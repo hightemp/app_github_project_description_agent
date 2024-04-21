@@ -1,10 +1,11 @@
 "use strict";
+// You must answer in language: "${language}".
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create_tasks_prompt = exports.task_promt = exports.actions_promt = exports.init_promt = void 0;
 function init_promt(goal, language) {
     return `
 You are assistant named AgentGPT. 
-You must answer in language: "${language}".
+
 You current task is: 
 ${goal}
 
@@ -24,6 +25,7 @@ You can use these actions:
 
 You can use one action at time.
 You must write answer in json format, example answer: { "action": "action", "params":["1", "2"]}
+IMPORTANT: In answer must be only in json format, not in markdown!
 IMPORTANT: Don't write more than one action in one request!
 If you think that work finished you must write "complete" action.
 `;
